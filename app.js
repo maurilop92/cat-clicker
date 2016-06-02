@@ -40,10 +40,8 @@
     init: function() {
       //model.init();
       viewList.init();
-    },
-    getNotes: function() {
-      return model.getAllNotes();
-    },
+      viewCatSection.init();
+    }
   };
 
   var viewList = {
@@ -54,14 +52,27 @@
     render: function(){
       var htmlStr = '';
       octopus.getCats().forEach(function(cat){
-        htmlStr += '<li>' + cat.name + '</li>';
+        htmlStr += '<li><button>' + cat.name + '</button></li>';
       });
       this.catList.html( htmlStr );
     }
   };
 
   var viewCatSection = {
-
+    init: function() {
+      this.catSection = $('#catSection');
+      viewCatSection.render();
+    },
+    render: function(){
+      var htmlStr = '';
+      octopus.getCats().forEach(function(cat){
+        htmlStr +=
+          '<h2>' + cat.name + '</h2>' +
+          '<img src="' + cat.img + '">' +
+          '<p>' + cat.clicks + '</p>';
+      });
+      this.catSection.html( htmlStr );
+    }
   };
 
   octopus.init();
