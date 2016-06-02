@@ -28,10 +28,8 @@
         clicks: 0
       }
     ],
-    init: function() {
-      for(var i = 0; i < this.cats.length; i++) {
-       $('#catList').append('<li>' + this.cat[i].name + '</li>');
-      }
+    getAllCats: function() {
+      return this.cats;
     }
   };
 
@@ -40,17 +38,32 @@
       return model.getAllCats();
     },
     init: function() {
-      model.init();
-      view.init();
-    }
+      //model.init();
+      viewList.init();
+    },
+    getNotes: function() {
+      return model.getAllNotes();
+    },
   };
 
   var viewList = {
-
+    init: function() {
+      this.catList = $('#catList');
+      viewList.render();
+    },
+    render: function(){
+      var htmlStr = '';
+      octopus.getCats().forEach(function(cat){
+        htmlStr += '<li>' + cat.name + '</li>';
+      });
+      this.catList.html( htmlStr );
+    }
   };
 
   var viewCatSection = {
 
   };
+
+  octopus.init();
 
 }());
