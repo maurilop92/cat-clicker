@@ -61,6 +61,15 @@
     toggleAdmin: function() {
       model.adminVisible = !model.adminVisible;
       viewAdmin.render();
+    },
+    updateCat: function(name, img, clicks) {
+      model.currentCat.name = name;
+      model.currentCat.img = img;
+      model.currentCat.clicks = clicks;
+
+      viewList.render();
+      viewCatSection.render();
+      this.toggleAdmin();
     }
   };
 
@@ -134,10 +143,19 @@
       // Store DOM element for easy access later
       this.adminSectionVisibility = document.getElementById('adminSection');
       this.adminButton = document.getElementById('adminButton');
+      this.submitButton = document.getElementById('submitButton');
+
+      var catNameInput = document.getElementById('catNameInput').value;
+      var catImgInput = document.getElementById('catImgInput').value;
+      var catClicksInput = document.getElementById('catClicksInput').value;
 
       // On click, toggle adminSection visibility
       this.adminButton.addEventListener('click', function() {
         octopus.toggleAdmin();
+      });
+
+      this.submitButton.addEventListener('click', function() {
+        octopus.updateCat(catNameInput, catImgInput, catClicksInput);
       });
 
       // Render this view
@@ -155,3 +173,9 @@
   octopus.init();
 
 }());
+
+
+
+// click Update
+// set currentCat properties to values in form
+// render list and catSection again showing updated values
