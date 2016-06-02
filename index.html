@@ -5,38 +5,13 @@
     <title>Cat clicker</title>
   </head>
   <body>
-    <div id="catList">
-      <ul>
-        <!-- Cat elements go here -->
-      </ul>
-    </div>
-    <div id="catSection">
-      <h2 id="catName"></h2>
-      <img src="" alt="cat" id="catImg" />
-      <h3 id="catClicks"></h3>
-      <button type="button" id="adminButton" name="admin">Admin</button>
-    </div>
-    <div id="adminSection">
-      <form>
-        <div>
-          <label>Cat name</label>
-          <input id="catNameInput" type="text">
-        </div>
-        <div>
-          <label>Cat image</label>
-          <input id="catImgInput" type="text">
-        </div>
-        <div>
-          <label>Cat clicks</label>
-          <input id="catClicksInput" type="number">
-        </div>
-        <div>
-          <input type="button" id="submitButton" value="Update">
-          <input type="button" id="cancelButton" value="Cancel">
-        </div>
-      </form>
+    <div id="cat">
+      <h2 id="cat-name"></h2>
+      <img src="" alt="cat" id="cat-img" />
+      <h3 id="cat-count"></h3>
     </div>
 
+    <script type="text/javascript" src="knockout-3.4.0.js"></script>
     <script type="text/javascript" src="jquery-1.12.3.js"></script>
     <script type="text/javascript" src="app.js"></script>
   </body>
