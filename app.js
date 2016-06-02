@@ -29,7 +29,8 @@
         img: 'img/cat5.jpg',
         clicks: 0
       }
-    ]
+    ],
+    adminVisible: false
   };
 
 
@@ -42,6 +43,7 @@
       // Initialize views
       viewList.init();
       viewCatSection.init();
+      viewAdmin.init();
     },
     getCurrentCat: function() {
       return model.currentCat;
@@ -55,6 +57,10 @@
     incrementCounter: function() {
       model.currentCat.clicks++;
       viewCatSection.render();
+    },
+    toggleAdmin: function() {
+      model.adminVisible = !model.adminVisible;
+      viewAdmin.render();
     }
   };
 
@@ -69,7 +75,7 @@
       this.catClicks = document.getElementById('catClicks');
 
       // On click, increment the current cat's counter
-      this.catImg.addEventListener('click', function(e) {
+      this.catImg.addEventListener('click', function() {
         octopus.incrementCounter();
       });
 
@@ -119,6 +125,29 @@
 
         // Add elem to the list
         this.catList.appendChild(elem);
+      }
+    }
+  };
+
+  var viewAdmin = {
+    init: function() {
+      // Store DOM element for easy access later
+      this.adminSectionVisibility = document.getElementById('adminSection');
+      this.adminButton = document.getElementById('adminButton');
+
+      // On click, toggle adminSection visibility
+      this.adminButton.addEventListener('click', function() {
+        octopus.toggleAdmin();
+      });
+
+      // Render this view
+      this.render();
+    },
+    render: function(){
+      if (model.adminVisible === true) {
+        this.adminSectionVisibility.style.visibility = 'visible';
+      }else{
+        this.adminSectionVisibility.style.visibility = 'hidden';
       }
     }
   };
