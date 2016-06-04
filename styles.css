@@ -1,13 +1,13 @@
 #catList {
   width: 200px;
-  height: 600px;
+  height: 650px;
   float: left;
   background-color: yellow;
 }
 
 #catSection {
   width: 800px;
-  height: 600px;
+  height: 650px;
   float: left;
   background-color: blue;
 }
@@ -18,7 +18,7 @@ img {
 
 #adminSection {
   width: 330px;
-  height: 600px;
+  height: 650px;
   float: left;
   background-color: green;
 }
