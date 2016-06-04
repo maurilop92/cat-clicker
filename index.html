@@ -6,38 +6,23 @@
   </head>
   <body>
     <div id="catList">
-      <ul>
-        <!-- Cat elements go here -->
+      <ul id="cats" data-bind="foreach: catList">
+        <li data-bind="text: name, click: $parent.setCurrentCat"></li>
       </ul>
     </div>
-    <div id="catSection">
-      <h2 id="catName"></h2>
-      <img src="" alt="cat" id="catImg" />
-      <h3 id="catClicks"></h3>
-      <button type="button" id="adminButton" name="admin">Admin</button>
-    </div>
-    <div id="adminSection">
-      <form>
-        <div>
-          <label>Cat name</label>
-          <input id="catNameInput" type="text">
-        </div>
-        <div>
-          <label>Cat image</label>
-          <input id="catImgInput" type="text">
-        </div>
-        <div>
-          <label>Cat clicks</label>
-          <input id="catClicksInput" type="number">
-        </div>
-        <div>
-          <input type="button" id="submitButton" value="Update">
-          <input type="button" id="cancelButton" value="Cancel">
-        </div>
-      </form>
+
+    <div data-bind="with: currentCat" id="catSection">
+      <h2 data-bind="text: name"></h2>
+      <h3 data-bind="text: nickname"></h3>
+      <img src="" alt="cat" data-bind="click: $parent.incrementCounter, attr: {src: imgSrc}" />
+      <p data-bind="text: clickCount"></p>
+      <h3>Friends</h3>
+      <ul data-bind="foreach: friends">
+        <li data-bind="text: $data"></li>
+      </ul>
     </div>
 
-    <script type="text/javascript" src="jquery-1.12.3.js"></script>
+    <script type="text/javascript" src="knockout-3.4.0.js"></script>
     <script type="text/javascript" src="app.js"></script>
   </body>
 </html>

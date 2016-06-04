@@ -1,178 +1,80 @@
-(function() {
-
-  // ----------------------- MODEL -----------------------
-  var model = {
-    currentCat: null,
-    cats: [
-      {
-        name: 'Cat 1',
-        img: 'img/cat1.jpg',
-        clicks: 0
-      },
-      {
-        name: 'Cat 2',
-        img: 'img/cat2.jpg',
-        clicks: 0
-      },
-      {
-        name: 'Cat 3',
-        img: 'img/cat3.jpg',
-        clicks: 0
-      },
-      {
-        name: 'Cat 4',
-        img: 'img/cat4.jpg',
-        clicks: 0
-      },
-      {
-        name: 'Cat 5',
-        img: 'img/cat5.jpg',
-        clicks: 0
-      }
-    ],
-    adminVisible: false
-  };
+var catData = [
+       {
+         name: 'Cat 1',
+         imgSrc: 'img/cat1.jpg',
+         clickCount: 0,
+         friends: ['Peter', 'Gary', 'Nick', 'Sam']
+       },
+       {
+         name: 'Cat 2',
+         imgSrc: 'img/cat2.jpg',
+         clickCount: 0,
+         friends: ['Peter', 'Gary', 'Nick', 'Sam']
+       },
+       {
+         name: 'Cat 3',
+         imgSrc: 'img/cat3.jpg',
+         clickCount: 0,
+         friends: ['Peter', 'Gary', 'Nick', 'Sam']
+       },
+       {
+         name: 'Cat 4',
+         imgSrc: 'img/cat4.jpg',
+         clickCount: 0,
+         friends: ['Peter', 'Gary', 'Nick', 'Sam']
+       },
+       {
+         name: 'Cat 5',
+         imgSrc: 'img/cat5.jpg',
+         clickCount: 0,
+         friends: ['Peter', 'Gary', 'Nick', 'Sam']
+       }
+     ]
 
 
-  // ----------------------- OCTOPUS -----------------------
-  var octopus = {
-    init: function() {
-      // Set our current cat to the first one on the list
-      model.currentCat = model.cats[0];
 
-      // Initialize views
-      viewList.init();
-      viewCatSection.init();
-      viewAdmin.init();
-    },
-    getCurrentCat: function() {
-      return model.currentCat;
-    },
-    getCats: function() {
-      return model.cats;
-    },
-    setCurrentCat: function(cat) {
-      model.currentCat = cat;
-    },
-    incrementCounter: function() {
-      model.currentCat.clicks++;
-      viewCatSection.render();
-    },
-    toggleAdmin: function() {
-      model.adminVisible = !model.adminVisible;
-      viewAdmin.render();
-    },
-    updateCat: function(name, img, clicks) {
-      model.currentCat.name = name || model.currentCat.name;
-      model.currentCat.img = img || model.currentCat.img;
-      model.currentCat.clicks = clicks || model.currentCat.clicks;
 
-      viewList.render();
-      viewCatSection.render();
-      this.toggleAdmin();
+var Cat = function(data) {
+  this.clickCount = ko.observable(data.clickCount);
+  this.name = ko.observable(data.name);
+  this.imgSrc = ko.observable(data.imgSrc);
+  this.friends = ko.observableArray(data.friends);
+
+  this.nickname = ko.computed(function() {
+    var nickname;
+    var clicks = this.clickCount();
+    if (clicks < 10) {
+      nickname = 'Baby';
+    } else if (clicks < 50) {
+      nickname = 'Young';
+    } else {
+      nickname = 'Adult';
     }
+    return nickname;
+  }, this);
+};
+
+
+
+
+var ViewModel = function() {
+  var self = this;
+
+  this.catList = ko.observableArray([]);
+
+  catData.forEach(function(catItem) {
+    this.catList.push( new Cat(catItem) );
+  }, this);
+
+  this.currentCat = ko.observable( this.catList()[0] );
+
+  this.incrementCounter = function() {
+    this.clickCount(this.clickCount() + 1);
   };
 
-
-  // ----------------------- VIEWS -----------------------
-  var viewCatSection = {
-    init: function() {
-      // Store pointers to DOM elements
-      this.catSection = document.getElementById('catSection');
-      this.catName = document.getElementById('catName');
-      this.catImg = document.getElementById('catImg');
-      this.catClicks = document.getElementById('catClicks');
-
-      // On click, increment the current cat's counter
-      this.catImg.addEventListener('click', function() {
-        octopus.incrementCounter();
-      });
-
-      // Render this view
-      this.render();
-    },
-    render: function(){
-      // Update DOM elements with values from the current cat
-      var currentCat = octopus.getCurrentCat();
-      this.catClicks.textContent = currentCat.clicks;
-      this.catName.textContent = currentCat.name;
-      this.catImg.src = currentCat.img;
-    }
+  this.setCurrentCat = function(clickedCat) {
+    self.currentCat(clickedCat); 
   };
+};
 
-  var viewList = {
-    init: function() {
-      // Store DOM element for easy access later
-      this.catList = document.getElementById('catList');
-
-      // Render this view
-      this.render();
-    },
-    render: function(){
-      // Get the cats we'll be rendering from the octopus
-      var cats = octopus.getCats();
-
-      // Empty the cat list
-      this.catList.innerHTML = '';
-
-      // Loop over the cats
-      for (var i = 0; i < cats.length; i++) {
-        var cat = cats[i];
-
-        // Make a new cat list item and set its text
-        var elem = document.createElement('li');
-        elem.textContent = cat.name;
-
-        // On click, setCurrentCat and render the viewCatSection
-        // (this uses the closure-in-a-loop trick)
-        elem.addEventListener('click', (function(catCopy) {
-          return function() {
-            octopus.setCurrentCat(catCopy);
-            viewCatSection.render();
-          };
-        })(cat));
-
-        // Add elem to the list
-        this.catList.appendChild(elem);
-      }
-    }
-  };
-
-  var viewAdmin = {
-    init: function() {
-      // Store DOM element for easy access later
-      this.adminSectionVisibility = document.getElementById('adminSection');
-      this.adminButton = document.getElementById('adminButton');
-      this.submitButton = document.getElementById('submitButton');
-
-      var catNameInput = document.getElementById('catNameInput');
-      var catImgInput = document.getElementById('catImgInput');
-      var catClicksInput = document.getElementById('catClicksInput');
-
-      // On click, toggle adminSection visibility
-      this.adminButton.addEventListener('click', function() {
-        octopus.toggleAdmin();
-      });
-
-      this.submitButton.addEventListener('click', function() {
-        octopus.updateCat(catNameInput.value, catImgInput.value, catClicksInput.value);
-        catNameInput.value = '';
-        catImgInput.value = '';
-        catClicksInput.value = '';
-      });
-
-      // Render this view
-      this.render();
-    },
-    render: function(){
-      if (model.adminVisible === true) {
-        this.adminSectionVisibility.style.visibility = 'visible';
-      }else{
-        this.adminSectionVisibility.style.visibility = 'hidden';
-      }
-    }
-  };
-
-  octopus.init();
-
-}());
+ko.applyBindings(new ViewModel());
